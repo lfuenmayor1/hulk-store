@@ -20,7 +20,14 @@ export const useForm = (initialState:any ) => {
     });
   }
 
+  const handleSelectChange =({target}: React.ChangeEvent<HTMLSelectElement>)=>{
+    setValues({
+      ...values,
+      [target.name]: target.value
+    }); 
+  }
 
-  return [values, handleInputChange, reset, setForm];
+
+  return [values, handleInputChange, handleSelectChange,reset, setForm];
 
 }

@@ -5,13 +5,14 @@ interface CustomButtonProps {
   variant:string,
   text:string,
   icon:string,
+  disabled:boolean;
   handelClick: () => void
 }
 
-const CustomButton = ({variant,text,icon,handelClick,...props}:CustomButtonProps) => (
+const CustomButton = ({variant,text,icon,disabled,handelClick,...props}:CustomButtonProps) => (
   <>
     <br/>
-    <Button variant={variant} onClick={handelClick}>{text} {icon} </Button>
+    <Button disabled={disabled} variant={variant} onClick={handelClick}>{text} {icon} </Button>
     <br/>
   </> 
 );

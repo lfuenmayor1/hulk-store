@@ -1,13 +1,12 @@
-import React, { FC } from 'react';
 import styles from './Purchase.module.css';
 import Panel from '../../components/Panel/Panel';
 import PurchaseForm from './components/PurchaseForm/PurchaseForm';
 
 interface PurchaseProps {}
 
-const Purchase: FC<PurchaseProps> = () => (
+const Purchase = () => (
   <div className={styles.Purchase}>
-    <Panel header="Comprar Productos" body={<PurchaseForm/> } />
+    <Panel header="Registrar Comprar Producto" body={<PurchaseForm/> } />
   </div>
 );
 

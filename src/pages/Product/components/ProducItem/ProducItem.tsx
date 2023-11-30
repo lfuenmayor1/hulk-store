@@ -25,14 +25,16 @@ const ProducItem = (props: ProductItemProps) => (
             text={"Ver Producto"}
             icon={""}
             handelClick={handelClick}
+            disabled ={false}
           />
         </Link>
-        <Link to={`/dashboard/movement`}>
+        <Link to={`/dashboard/movement/${props.producto.id}`}>
           <CustomButton
             variant={"primary"}
             text={"Ver Movimientos"}
             icon={""}
             handelClick={handelClick}
+            disabled ={false}
           />
         </Link>
       </td>

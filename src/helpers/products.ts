@@ -17,7 +17,7 @@ export const products:Product[] = [
     },
     {
         id: 3,
-        name: 'Baby Yoda Collection',
+        name: 'Groot Collection',
         quantity: 3,
         price: 8000
     }

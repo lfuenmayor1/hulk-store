@@ -7,7 +7,11 @@ export const MenuOptions:MenuOption[] = [
         },
         {
             url:"/dashboard/purchase",
-            name:"Comprar Producto" 
+            name:"Registrar Comprar Producto" 
+        },
+        {
+            url:"/dashboard/sale",
+            name:"Registrar Venta Producto" 
         }
 
 ]
