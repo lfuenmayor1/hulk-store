@@ -1,6 +1,8 @@
 export const types = {
     movementTypes: {
+        INICIAL: "Inventario Inicial",
         ENTRADA :"Entrada",
-        AJUSTE:"Ajuste Manual de inventario"
+        AJUSTE:"Ajuste Manual de inventario",
+        SALIDA:"Salida"
     }
 }

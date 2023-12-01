@@ -29,7 +29,7 @@ const Inventory = () => {
           { products.map((product:Product, index) => {
             return (
               <tr key={index}>
-              <ProducItem key={index} producto = {product}></ProducItem>
+              <ProducItem key={index} product = {product}></ProducItem>
               </tr>
             );})
           }

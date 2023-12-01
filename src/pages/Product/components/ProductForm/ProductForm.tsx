@@ -1,27 +1,27 @@
 import Swal from 'sweetalert2'
-import {useAppDispatch , useAppSelector} from '../../../../hooks/useRedux'
 import { useForm } from '../../../../hooks/useForm';
+import {useAppDispatch , useAppSelector} from '../../../../hooks/useRedux'
 import { addMovement } from '../../../../redux/slices/movementSlice';
-import styles from './ProductForm.module.css';
-import Product from '../../../../interfaces/Product';
+import { updateProduct } from '../../../../redux/slices/productSlice';
 import Input from '../../../../components/Input/Input';
-import CustomButton from '../../../../components/ButtonCustom/CustomButton';
-import { GetProducts } from '../../../../helpers/selectors/GetProducts';
-import { GetMovements } from '../../../../helpers/selectors/GetMovements';
-import Movement from '../.././../../interfaces/Movement'
+import ButtonBox from '../../../../components/ButtonBox/ButtonBox';
+
+import styles from './ProductForm.module.css';
 import { types } from '../../../../types/types';
+import Product from '../../../../interfaces/Product';
+import Movement from '../.././../../interfaces/Movement'
+import { GetMovements } from '../../../../helpers/selectors/GetMovements';
+import Button from '../../../../interfaces/Button';
 
 interface ProductFormProps {
   product:Product
 }
 
-export const ProductForm = ({product,...props}:ProductFormProps) => {
+export const ProductForm = ({product}:ProductFormProps) => {
   const dispatch = useAppDispatch();
-  let products = GetProducts();
   let movements = GetMovements();
-  
+
   const handleUpdate = () => {
-      product =  products.filter(product => product.id == product.id)[0] ;
       let totalPrice = quantity * price; 
       let movement:Movement = {
         id : movements.length,
@@ -38,6 +38,7 @@ export const ProductForm = ({product,...props}:ProductFormProps) => {
         balancePrice:totalPrice
       }
       dispatch(addMovement(movement))
+      dispatch(updateProduct({...product,quantity:quantity,price:price} ))
       Swal.fire('Actualización Exitosa', `producto ${product.name} actualizado con éxito`, 'success')  
   }
 
@@ -49,38 +50,53 @@ export const ProductForm = ({product,...props}:ProductFormProps) => {
   
   const { name, price, quantity } = formValues;
 
+  let buttons:Button[] = [
+    {
+      variant:"primary",
+      text:"Actualizar Inventario",
+      icon:"",
+      disabled:quantity && price ?false:true,
+      isLink: false,
+      link:"",
+      handelClick:  handleUpdate
+    },
+    {
+      variant:"success",
+      text:"Ver Movimientos",
+      icon:"",
+      disabled:false,
+      isLink: true,
+      link:`/dashboard/movement/${product.id}`,
+      handelClick: ()=>{}
+    }
+  ] 
+
   return(
     <form onSubmit={handleUpdate}>
-      <br />
-      <Input 
-        label={"Nombre"} 
-        name={"name"} 
-        value={name} 
-        disabled={true} 
-        change={handleInputChange} 
-      />
-      <Input 
-        label={"Precio"} 
-        name={"price"} 
-        value={price} 
-        disabled={false} 
-        change={handleInputChange} 
-      />
-      <Input 
-        label={"Cantidad"} 
-        name={"quantity"} 
-        value={quantity} 
-        disabled={false} 
-        change={handleInputChange} 
-      />
-      <br />
-      <CustomButton
-        variant={"primary"}
-        text={"Actualizar Inventario"}
-        icon={""}
-        handelClick={handleUpdate}
-        disabled = {false}
-      />
+        <br />
+        <Input 
+          label={"Nombre"} 
+          name={"name"} 
+          value={name} 
+          disabled={true} 
+          change={handleInputChange} 
+        />
+        <Input 
+          label={"Precio"} 
+          name={"price"} 
+          value={price} 
+          disabled={false} 
+          change={handleInputChange} 
+        />
+        <Input 
+          label={"Cantidad"} 
+          name={"quantity"} 
+          value={quantity} 
+          disabled={false} 
+          change={handleInputChange} 
+        />
+        <br />
+        <ButtonBox buttons={buttons}/>
     </form>
   )
 };

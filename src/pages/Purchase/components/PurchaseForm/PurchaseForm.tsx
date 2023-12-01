@@ -4,35 +4,40 @@ import { useForm } from '../../../../hooks/useForm';
 import { addMovement } from '../../../../redux/slices/movementSlice';
 import Input from '../../../../components/Input/Input';
 import InputSelect from '../../../../components/InputSelect/InputSelect';
-import CustomButton from '../../../../components/ButtonCustom/CustomButton';
+import ButtonBox from '../../../../components/ButtonBox/ButtonBox';
 import styles from './PurchaseForm.module.css';
 import Product from '../../../../interfaces/Product';
 import Movement from '../../../../interfaces/Movement';
-import { products } from '../../../../helpers/products';
 import { types } from '../../../../types/types';
 import { GetMovements } from '../../../../helpers/selectors/GetMovements';
+import { updateProduct } from '../../../../redux/slices/productSlice';
+import Button from '../../../../interfaces/Button';
+import { GetProducts } from '../../../../helpers/selectors/GetProducts';
 
-const ItemsSelect = (products:any)=>{
-  let itemsSelect: any[] =[]; 
-  products.map(({id, name}:Product) => {
-    itemsSelect.push({id, name});
-  })
-  return itemsSelect;
-}
+
 
 const PurchaseForm = () => {
+  let products = GetProducts();
   const dispatch = useAppDispatch();
   let movements  = GetMovements();
-  let product:Product;
+  const [formValues, handleInputChange,handleSelectChange,reset] = useForm({ quantity: "",price:"",productSelect:0});
+  const { quantity,price,productSelect } = formValues;
 
-
-  const [formValues, handleInputChange,handleSelectChange] = useForm({ quantity: "",price:"",productSelet:0});
-  const { quantity,price,productSelet } = formValues;
+  const ItemsSelect = (products:any)=>{
+    let itemsSelect: any[] =[]; 
+    products.map(({id, name}:Product) => {  itemsSelect.push({id, name});  })
+    
+    return itemsSelect;
+  }
 
   const handlePurchase = () => {
-    if (productSelet != 0) {
-      product =  products.filter(product => product.id == productSelet)[0] ;
-      let totalPrice = quantity * price; 
+    if (productSelect != 0) {
+
+      let product:Product =  products.filter(product => product.id == productSelect)[0] ;
+      let totalPrice      = quantity * price; 
+      let newQuantity     = CalculateBalanceUnitary(product.id , quantity)
+      let balance         = CalculateBalancePrice(product.id , totalPrice)
+
       let movement:Movement = {
         id : movements.length,
         product:product,
@@ -44,10 +49,12 @@ const PurchaseForm = () => {
         quantitySale: 0,
         priceUnitarySale:0,
         priceTotalSale: 0,
-        balanceUnitary:CalculateBalanceUnitary(productSelet , quantity),
-        balancePrice:CalculateBalancePrice(productSelet , totalPrice)
+        balanceUnitary:newQuantity,
+        balancePrice:balance
       }
+      dispatch(updateProduct({...product,quantity:newQuantity,price:price} ))
       dispatch(addMovement(movement))
+      reset();
       Swal.fire('Compra Exitosa', `Compra de producto ${product.name} Registrada con éxito`, 'success')
     }    
   }
@@ -62,16 +69,27 @@ const PurchaseForm = () => {
     return   Number(movement.balancePrice) + Number(priceNow);
   }
 
-  
+  let buttons:Button[] = [
+    {
+      variant:"primary",
+      text:"Registrar Comprar",
+      icon:"",
+      disabled:quantity && price && (productSelect != 0)?false:true,
+      isLink: false,
+      link:"",
+      handelClick: handlePurchase
+    }
+  ] ;
+
   return(
     <>
     <div className={styles.PurchaseForm}>
         <form onSubmit={(handlePurchase)} >
           <br />
             <InputSelect
-              id={"productSelet"}
+              id={"productSelect"}
               label={"Seleccione Producto"}
-              name="productSelet"
+              name="productSelect"
               items={ItemsSelect(products)}
               onChange={handleSelectChange}
             />
@@ -92,13 +110,8 @@ const PurchaseForm = () => {
               change={handleInputChange} 
             />
             <br/>
-            <CustomButton
-              variant={"primary"}
-              text={"Registrar Comprar"}
-              icon={""}
-              handelClick={handlePurchase}
-              disabled = {quantity && price && (productSelet != 0)?false:true}
-            />
+            <ButtonBox buttons={buttons}/>
+           
         </form>
     </div>
     </>

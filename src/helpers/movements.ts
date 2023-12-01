@@ -1,5 +1,6 @@
 import Thead from "../interfaces/Thead"
 import Movement from "../interfaces/Movement";
+import { types } from "../types/types";
 
 export const movements:Movement[] = [
     {
@@ -10,7 +11,7 @@ export const movements:Movement[] = [
             quantity: 20,
             price: 345
         },
-        type: "Inventario Inicial",
+        type: types.movementTypes["INICIAL"],
         date: new Date(),
         quantity: 20,
         priceUnitary:345,
@@ -29,7 +30,7 @@ export const movements:Movement[] = [
             quantity: 8,
             price: 2800
         },
-        type: "Inventario Inicial",
+        type: types.movementTypes["INICIAL"],
         date: new Date(),
         quantity: 8,
         priceUnitary:2800,
@@ -48,7 +49,7 @@ export const movements:Movement[] = [
             quantity: 3,
             price: 8000
         },
-        type: "Inventario Inicial",
+        type: types.movementTypes["INICIAL"],
         date: new Date(),
         quantity: 3,
         priceUnitary:8000,

@@ -1,46 +1,36 @@
-import styles from './ProducItem.module.css';
-import {Link} from 'react-router-dom';
-
-import CustomButton from '../../../../components/ButtonCustom/CustomButton';
+import ButtonBox from '../../../../components/ButtonBox/ButtonBox';
 import Product from '../../../../interfaces/Product';
+import Button from '../../../../interfaces/Button';
+import styles from './ProducItem.module.css';
 
 interface ProductItemProps {
-  producto: Product,
-}
-const handelClick =()=>{
-  alert("VER MOVIMIENTOS DE INVENTARIO")
+  product: Product,
 }
 
+const ProducItem = (props: ProductItemProps) => { 
 
-const ProducItem = (props: ProductItemProps) => (
-  <>
-      <td>{props.producto.id.toString()}</td>
-      <td>{props.producto.name }</td>
-      <td>{props.producto.quantity.toString()}</td>
-      <td>{props.producto.price.toString()}</td>
-      <td>
-        <Link to={`/dashboard/product/${props.producto.id}`}>
-          <CustomButton
-            variant={"primary"}
-            text={"Ver Producto"}
-            icon={""}
-            handelClick={handelClick}
-            disabled ={false}
-          />
-        </Link>
-        <Link to={`/dashboard/movement/${props.producto.id}`}>
-          <CustomButton
-            variant={"primary"}
-            text={"Ver Movimientos"}
-            icon={""}
-            handelClick={handelClick}
-            disabled ={false}
-          />
-        </Link>
-      </td>
-   
-      
-  </>
-);
+  let buttons:Button[] = [
+    {
+      variant:"primary",
+      text:"Ver Producto",
+      icon:"",
+      disabled:false,
+      isLink: true,
+      link:`/dashboard/product/${props.product.id}`,
+      handelClick:()=>{}
+    }
+  ] ;
+  return (
+    <>
+        <td>{props.product.id.toString()}</td>
+        <td>{props.product.name }</td>
+        <td>{props.product.quantity.toString()}</td>
+        <td>{props.product.price.toString()}</td>
+        <td>
+          <ButtonBox buttons={buttons}/>
+        </td>
+    </>
+  );
+}
 
 export default ProducItem;

@@ -27,7 +27,6 @@ export const useForm = (initialState:any ) => {
     }); 
   }
 
-
   return [values, handleInputChange, handleSelectChange,reset, setForm];
 
 }
